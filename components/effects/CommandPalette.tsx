@@ -82,6 +82,16 @@ export function CommandPalette() {
     ];
     const fun: Cmd[] = [
       {
+        id: "fun-snake",
+        label: "Play Snake 🐍",
+        group: "Fun",
+        keywords: "game bored play arcade hourglass",
+        perform: () => {
+          setOpen(false);
+          window.dispatchEvent(new Event("open-snake"));
+        },
+      },
+      {
         id: "fun-random",
         label: "Surprise me — random theme",
         group: "Fun",

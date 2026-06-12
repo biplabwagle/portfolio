@@ -25,6 +25,7 @@ import { FlowField } from "@/components/effects/FlowField";
 import { SmoothScroll } from "@/components/effects/SmoothScroll";
 import { SectionDots } from "@/components/effects/SectionDots";
 import { GlobeIntro } from "@/components/effects/GlobeIntro";
+import { SnakeGame } from "@/components/effects/SnakeGame";
 import { site } from "@/lib/site";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -126,6 +127,7 @@ export default function RootLayout({
           <Cursor />
           <TouchFX />
           <GlobeIntro />
+          <SnakeGame />
         </ThemeProvider>
       </body>
     </html>
