@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { ArrowRight, ArrowUpRight, Sparkles } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { site, stats } from "@/lib/site";
 import { FocusRing } from "./FocusRing";
 import { Magnetic } from "./effects/Magnetic";
@@ -102,7 +102,14 @@ export function Hero() {
                 data-cursor-label="Visit"
                 className="group inline-flex items-center gap-2 rounded-xl glass px-5 py-3 text-sm font-medium text-fg transition-colors hover:border-[var(--color-border-strong)]"
               >
-                <Sparkles className="h-4 w-4 text-violet" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/glassfocus.png"
+                  alt=""
+                  width={20}
+                  height={20}
+                  className="h-5 w-5 rounded-md"
+                />
                 Explore GlassFocus
                 <ArrowUpRight className="h-4 w-4 text-muted transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>

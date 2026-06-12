@@ -4,14 +4,14 @@
 
 **A calm, cinematic developer portfolio — one site, seven living themes, and a globe that unfolds into the page.**
 
-[![Live](https://img.shields.io/badge/live-waglegroup.com-8b5cf6?style=for-the-badge)](https://waglegroup.web.app)
+[![Live](https://img.shields.io/badge/live-waglegroup.com-8b5cf6?style=for-the-badge)](https://waglegroup.com)
 [![Next.js](https://img.shields.io/badge/Next.js_16-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org)
 [![React](https://img.shields.io/badge/React_19-149ECA?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Tailwind](https://img.shields.io/badge/Tailwind_v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
 
-[**Live site →**](https://waglegroup.web.app) · [GlassFocus](https://www.glassfocus.app/) · [App Store](https://apps.apple.com/us/app/glassfocus-focus-todos/id6757988398) · [LinkedIn](https://www.linkedin.com/in/biplab-wagle-3953ba119/) · [X](https://twitter.com/bipz17)
+[**Live site →**](https://waglegroup.com) · [GlassFocus](https://www.glassfocus.app/) · [App Store](https://apps.apple.com/us/app/glassfocus-focus-todos/id6757988398) · [LinkedIn](https://www.linkedin.com/in/biplab-wagle-3953ba119/) · [X](https://twitter.com/bipz17)
 
 </div>
 
@@ -23,7 +23,7 @@ I'm **Biplab Wagle** — a Lead Software Engineer (8+ years across banking, heal
 
 It ships with **7 completely different switchable themes**, a research‑backed **immersive interaction layer**, and a signature **WebGL globe intro** — the live page wraps a spinning globe that unfolds, like Earth flattening into a map, on every load and every theme change.
 
-> 🎬 Open the [live site](https://waglegroup.web.app), press **⌘K**, flip through the themes, and try the Konami code (`↑↑↓↓←→←→BA`).
+> 🎬 Open the [live site](https://waglegroup.com), press **⌘K**, flip through the themes, and try the Konami code (`↑↑↓↓←→←→BA`).
 
 ---
 
@@ -141,6 +141,6 @@ npm run deploy
 
 This is my personal portfolio — feel free to draw inspiration, but please don't clone it 1:1. 💜
 
-[waglegroup.com](https://waglegroup.web.app) · [GlassFocus](https://www.glassfocus.app/) · [LinkedIn](https://www.linkedin.com/in/biplab-wagle-3953ba119/) · [X @bipz17](https://twitter.com/bipz17)
+[waglegroup.com](https://waglegroup.com) · [GlassFocus](https://www.glassfocus.app/) · [LinkedIn](https://www.linkedin.com/in/biplab-wagle-3953ba119/) · [X @bipz17](https://twitter.com/bipz17)
 
 </div>

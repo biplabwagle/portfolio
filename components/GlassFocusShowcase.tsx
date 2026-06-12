@@ -28,24 +28,14 @@ export function GlassFocusShowcase() {
           {/* Left: copy */}
           <div className="flex flex-col justify-center p-8 sm:p-12">
             <div className="flex items-center gap-3">
-              <span className="accent-glow grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-iris to-cyan text-bg">
-                <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none">
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="8"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    opacity="0.35"
-                  />
-                  <path
-                    d="M12 4a8 8 0 0 1 8 8"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/glassfocus.png"
+                alt="GlassFocus app icon"
+                width={44}
+                height={44}
+                className="accent-glow h-11 w-11 rounded-2xl"
+              />
               <div>
                 <h3 className="text-2xl font-semibold tracking-tight text-fg">
                   {glassFocus.name}
