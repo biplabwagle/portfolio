@@ -2,7 +2,14 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { Gamepad2, X } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  Gamepad2,
+  X,
+} from "lucide-react";
 
 /* ---------------------------------------------------------------------------
    Snake — a themed easter-egg game. Opens from the ⌘K palette, a secret
@@ -21,6 +28,45 @@ const TICK_MIN = 66;
 type Cell = { x: number; y: number };
 type Status = "ready" | "playing" | "over";
 
+function DirPad({
+  onDir,
+  className,
+}: {
+  onDir: (d: { x: number; y: number }) => void;
+  className?: string;
+}) {
+  const mk = (
+    d: { x: number; y: number },
+    label: string,
+    Icon: typeof ChevronUp,
+    pos: string
+  ) => (
+    <button
+      key={label}
+      type="button"
+      aria-label={`Move ${label}`}
+      onPointerDown={(e) => {
+        e.preventDefault();
+        onDir(d);
+      }}
+      className={`pointer-events-auto absolute grid h-12 w-12 place-items-center rounded-2xl glass-strong text-fg transition-transform active:scale-90 ${pos}`}
+    >
+      <Icon className="h-6 w-6" />
+    </button>
+  );
+  return (
+    <div
+      data-no-cursor
+      className={`pointer-events-auto h-36 w-36 touch-none select-none ${className ?? ""}`}
+    >
+      {mk({ x: 0, y: -1 }, "up", ChevronUp, "left-1/2 top-0 -translate-x-1/2")}
+      {mk({ x: 0, y: 1 }, "down", ChevronDown, "bottom-0 left-1/2 -translate-x-1/2")}
+      {mk({ x: -1, y: 0 }, "left", ChevronLeft, "left-0 top-1/2 -translate-y-1/2")}
+      {mk({ x: 1, y: 0 }, "right", ChevronRight, "right-0 top-1/2 -translate-y-1/2")}
+    </div>
+  );
+}
+
 const hexToRgb = (h: string): [number, number, number] => {
   let s = h.trim().replace("#", "");
   if (s.length === 3) s = s.split("").map((c) => c + c).join("");
@@ -37,6 +83,7 @@ export function SnakeGame() {
   const [high, setHigh] = useState(0);
   const [nudge, setNudge] = useState(false);
   const [boardSize, setBoardSize] = useState(300);
+  const [pad, setPad] = useState({ show: false, split: false });
   const reduceMotion = useReducedMotion();
   const nudgeRef = useRef(false);
   nudgeRef.current = nudge;
@@ -59,7 +106,9 @@ export function SnakeGame() {
   const cell = useRef(20);
   const sizePx = useRef(380);
   const img = useRef<HTMLImageElement | null>(null);
-  const ctl = useRef<{ start: () => void } | null>(null);
+  const ctl = useRef<{ start: () => void; queueDir: (d: Cell) => void } | null>(
+    null
+  );
 
   const openGame = useCallback(() => {
     setNudge(false);
@@ -69,6 +118,23 @@ export function SnakeGame() {
   const closeGame = useCallback(() => {
     openRef.current = false;
     setOpen(false);
+  }, []);
+
+  // Touch controls: show a D-pad on touch devices; split it to the bottom
+  // corners (one per thumb) when a phone is held in landscape.
+  useEffect(() => {
+    const update = () => {
+      const touch = window.matchMedia("(pointer: coarse)").matches;
+      const split = touch && window.innerWidth > window.innerHeight;
+      setPad((p) => (p.show === touch && p.split === split ? p : { show: touch, split }));
+    };
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("orientationchange", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("orientationchange", update);
+    };
   }, []);
 
   // Mount: load icon + high score, wire triggers (event, type-code, idle nudge).
@@ -341,7 +407,6 @@ export function SnakeGame() {
       cancelAnimationFrame(raf.current);
       raf.current = requestAnimationFrame(loop);
     };
-    ctl.current = { start };
 
     const queueDir = (nd: Cell) => {
       if (statusRef.current === "ready") start();
@@ -355,6 +420,7 @@ export function SnakeGame() {
       )
         queue.current.push(nd);
     };
+    ctl.current = { start, queueDir };
 
     sizeCanvas();
     statusRef.current = "ready";
@@ -485,7 +551,9 @@ export function SnakeGame() {
       <AnimatePresence>
         {open ? (
           <motion.div
-            className="fixed inset-0 z-[96] flex justify-center sm:items-center sm:p-4"
+            className={`fixed inset-0 z-[96] flex justify-center ${
+              pad.split ? "" : "sm:items-center sm:p-4"
+            }`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -503,7 +571,11 @@ export function SnakeGame() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 14, scale: 0.97 }}
               transition={{ type: "spring", stiffness: 320, damping: 28 }}
-              className="menu-panel relative flex h-full w-full flex-col rounded-none p-4 sm:h-auto sm:max-h-[94vh] sm:w-auto sm:rounded-3xl sm:p-5"
+              className={`menu-panel relative flex h-full w-full flex-col rounded-none ${
+                pad.split
+                  ? "p-3"
+                  : "p-4 sm:h-auto sm:max-h-[94vh] sm:w-auto sm:rounded-3xl sm:p-5"
+              }`}
             >
               <div className="mb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -578,16 +650,50 @@ export function SnakeGame() {
                 </div>
               </div>
 
+              {/* Portrait / tablet: one centered D-pad below the board */}
+              {pad.show && !pad.split ? (
+                <div className="flex shrink-0 justify-center pt-3">
+                  <DirPad
+                    onDir={(d) => ctl.current?.queueDir(d)}
+                    className="relative"
+                  />
+                </div>
+              ) : null}
+
               <p className="mt-4 text-center text-xs text-faint">
-                <span className="hidden sm:inline">
-                  Arrow keys / WASD to move · Esc to close
-                </span>
-                <span className="sm:hidden">Swipe to move · tap ✕ to close</span>
+                {pad.show ? (
+                  <span>Use the pad or swipe · tap ✕ to close</span>
+                ) : (
+                  <>
+                    <span className="hidden sm:inline">
+                      Arrow keys / WASD to move · Esc to close
+                    </span>
+                    <span className="sm:hidden">
+                      Swipe to move · tap ✕ to close
+                    </span>
+                  </>
+                )}
               </p>
             </motion.div>
           </motion.div>
         ) : null}
       </AnimatePresence>
+
+      {/* Landscape (touch): a D-pad in each bottom corner — one per thumb.
+          Rendered at the top level so `fixed` resolves to the viewport rather
+          than the transformed modal panel. */}
+      {open && pad.show && pad.split ? (
+        <>
+          <DirPad
+            onDir={(d) => ctl.current?.queueDir(d)}
+            className="fixed bottom-6 left-6 z-[97] scale-90"
+          />
+          <DirPad
+            onDir={(d) => ctl.current?.queueDir(d)}
+            className="fixed bottom-6 right-6 z-[97] scale-90"
+          />
+        </>
+      ) : null}
     </>
   );
 }
