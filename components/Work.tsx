@@ -8,13 +8,13 @@ export function Work() {
   return (
     <section id="work" className="relative mx-auto max-w-6xl px-6 py-24 sm:py-28">
       <SectionHeading
-        eyebrow="Selected work"
+        eyebrow="Proof, not promises"
         title={
           <>
-            Things I’ve <span className="gradient-text">designed & shipped</span>.
+            Real products, <span className="gradient-text">live and in users’ hands</span>.
           </>
         }
-        description="A look at what I build. Real products, real users — with the polish that makes them feel inevitable."
+        description="Not concept decks or case-study theater — software that's shipped and earning its keep, with the polish that makes it feel inevitable."
       />
 
       <div className="mt-14 grid gap-5 md:grid-cols-2">

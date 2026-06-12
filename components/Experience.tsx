@@ -10,13 +10,13 @@ export function Experience() {
       className="relative mx-auto max-w-6xl px-6 py-24 sm:py-28"
     >
       <SectionHeading
-        eyebrow="Experience"
+        eyebrow="Track record"
         title={
           <>
-            8+ years of <span className="gradient-text">shipping at scale</span>.
+            8+ years where <span className="gradient-text">downtime wasn’t an option</span>.
           </>
         }
-        description="Banking, healthcare, and information services — leading teams and modernizing platforms where reliability isn't optional."
+        description="Banking, healthcare, and information services — I lead teams and modernize the platforms a business can't afford to have go down."
       />
 
       <div className="relative mt-14">

@@ -9,14 +9,13 @@ export function Approach() {
       className="relative mx-auto max-w-6xl px-6 py-24 sm:py-28"
     >
       <SectionHeading
-        eyebrow="How I work"
+        eyebrow="The way I work"
         title={
           <>
-            From idea to{" "}
-            <span className="gradient-text">shipped</span>, with AI as leverage.
+            Fast to ship. <span className="gradient-text">Safe to trust</span>.
           </>
         }
-        description="Models make me faster, not sloppier. I keep taste, correctness, and the user in the loop the whole way."
+        description="AI is leverage, not a shortcut — I keep taste, correctness, and your users in the loop the whole way, from your idea to live."
       />
 
       <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
