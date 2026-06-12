@@ -26,6 +26,7 @@ import { SmoothScroll } from "@/components/effects/SmoothScroll";
 import { SectionDots } from "@/components/effects/SectionDots";
 import { GlobeIntro } from "@/components/effects/GlobeIntro";
 import { SnakeGame } from "@/components/effects/SnakeGame";
+import { EasterEggs } from "@/components/effects/EasterEggs";
 import { site } from "@/lib/site";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -128,6 +129,7 @@ export default function RootLayout({
           <TouchFX />
           <GlobeIntro />
           <SnakeGame />
+          <EasterEggs />
         </ThemeProvider>
       </body>
     </html>

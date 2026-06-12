@@ -24,7 +24,7 @@ export function SectionHeading({
       }
     >
       <Reveal>
-        <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.25em] text-faint">
+        <span className="eyebrow inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.25em] text-faint">
           <span className="h-px w-6 bg-gradient-to-r from-iris/0 to-iris/80" />
           <ScrambleText text={eyebrow} />
         </span>
@@ -36,7 +36,7 @@ export function SectionHeading({
       </Reveal>
       {description ? (
         <Reveal delay={0.1}>
-          <p className="mt-4 text-base leading-relaxed text-muted text-balance sm:text-lg">
+          <p className="section-desc mt-4 text-base leading-relaxed text-muted text-balance sm:text-lg">
             {description}
           </p>
         </Reveal>

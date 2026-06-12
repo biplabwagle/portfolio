@@ -678,6 +678,130 @@ html.custom-cursor [contenteditable="true"] {
 }
 
 /* ============================================================================
+   Theme personalities — layout-level CSS signatures that make each theme feel
+   like a different site, not just a different palette.
+============================================================================ */
+
+/* — Terminal: shell prompts, blinking cursor, hard offset hover — */
+[data-theme="terminal"] .eyebrow::before {
+  content: "$ ";
+  color: var(--color-iris);
+  letter-spacing: 0;
+}
+[data-theme="terminal"] .eyebrow > span:first-child {
+  display: none; /* drop the gradient rule line — prompts don't need it */
+}
+[data-theme="terminal"] h1::after {
+  content: "_";
+  margin-left: 0.08em;
+  color: var(--color-iris);
+  animation: blink 1.1s steps(2, start) infinite;
+}
+[data-theme="terminal"] .hover-lift:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 3px 3px 0 rgba(51, 255, 153, 0.35);
+}
+
+/* — Editorial: magazine drop caps, wide eyebrows, justified intro — */
+[data-theme="editorial"] .section-desc::first-letter {
+  float: left;
+  font-family: var(--t-font-display);
+  font-size: 3em;
+  line-height: 0.82;
+  padding-right: 0.1em;
+  color: var(--color-iris);
+}
+[data-theme="editorial"] .eyebrow {
+  letter-spacing: 0.45em;
+}
+[data-theme="editorial"] h2 {
+  font-weight: 500;
+}
+[data-theme="editorial"] .glass {
+  box-shadow: 0 1px 0 rgba(20, 20, 24, 0.06), 0 12px 28px -20px rgba(20, 20, 24, 0.3);
+}
+
+/* — Brutalist: stickered, slightly askew cards that straighten on hover — */
+[data-theme="brutalist"] :is(.grid, ol) > :nth-child(odd) .hover-lift {
+  rotate: -0.7deg;
+}
+[data-theme="brutalist"] :is(.grid, ol) > :nth-child(even) .hover-lift {
+  rotate: 0.65deg;
+}
+[data-theme="brutalist"] .hover-lift:hover {
+  rotate: 0deg;
+}
+[data-theme="brutalist"] .gradient-text {
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.1em;
+  text-decoration-color: #141414;
+  text-underline-offset: 0.12em;
+}
+[data-theme="brutalist"] .eyebrow {
+  background: #141414;
+  color: #f4efe6;
+  padding: 0.35em 0.7em;
+}
+[data-theme="brutalist"] .eyebrow > span:first-child {
+  display: none;
+}
+
+/* — Sunset: organic, asymmetric blob corners — */
+[data-theme="sunset"] .card-sheen {
+  border-radius: 1.6rem 2.6rem 1.6rem 2.6rem;
+}
+[data-theme="sunset"] .eyebrow {
+  letter-spacing: 0.35em;
+}
+
+/* — Noir: double gold frames, couture letter-spacing — */
+[data-theme="noir"] .glass {
+  outline: 1px solid rgba(212, 175, 110, 0.16);
+  outline-offset: 4px;
+}
+[data-theme="noir"] .eyebrow {
+  letter-spacing: 0.55em;
+}
+[data-theme="noir"] h2 {
+  font-weight: 500;
+}
+
+/* — Cyberwave: cards breathe neon — */
+[data-theme="neon"] .spotlight {
+  animation: neon-card 4.5s ease-in-out infinite;
+}
+[data-theme="neon"] .eyebrow::before {
+  content: "// ";
+  color: var(--color-cyan);
+  letter-spacing: 0;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes neon-card {
+  0%,
+  100% {
+    box-shadow: 0 0 18px -8px rgba(255, 45, 160, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 26px -6px rgba(0, 229, 255, 0.4);
+  }
+}
+
+/* Barrel roll (logo 5-click easter egg) */
+.barrel-roll {
+  animation: barrel-roll 1.3s cubic-bezier(0.45, 0, 0.3, 1) 1;
+}
+@keyframes barrel-roll {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================================
    Keyframes
 ============================================================================ */
 @keyframes drift {

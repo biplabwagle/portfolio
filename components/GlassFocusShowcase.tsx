@@ -17,7 +17,7 @@ export function GlassFocusShowcase() {
       className="relative mx-auto max-w-6xl px-6 py-24 sm:py-28"
     >
       <Reveal>
-        <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.25em] text-faint">
+        <span className="eyebrow inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.25em] text-faint">
           <span className="h-px w-6 bg-gradient-to-r from-iris/0 to-iris/80" />
           Featured product
         </span>
