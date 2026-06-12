@@ -7,6 +7,7 @@ import { site, stats } from "@/lib/site";
 import { FocusRing } from "./FocusRing";
 import { Magnetic } from "./effects/Magnetic";
 import { Tilt } from "./effects/Tilt";
+import { FlipWord } from "./effects/FlipWord";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -46,15 +47,24 @@ export function Hero() {
           </motion.div>
 
           <h1 className="mt-6 text-[clamp(2.6rem,7vw,4.7rem)] font-semibold leading-[1.02] tracking-tight text-balance">
-            {site.headline.map((line, i) => (
+            <motion.span
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease, delay: 0.1 }}
+              className="block"
+            >
+              {site.headline.lead}{" "}
+              <FlipWord words={site.headline.rotate} className="gradient-text" />,
+            </motion.span>
+            {site.headline.rest.map((line, i) => (
               <motion.span
                 key={line}
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease, delay: 0.1 + i * 0.08 }}
+                transition={{ duration: 0.8, ease, delay: 0.18 + i * 0.08 }}
                 className="block"
               >
-                {i === 1 ? <span className="gradient-text">{line}</span> : line}
+                {i === 0 ? <span className="gradient-text">{line}</span> : line}
               </motion.span>
             ))}
           </h1>

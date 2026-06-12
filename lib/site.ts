@@ -11,7 +11,13 @@ export const site = {
   email: "biplab@waglegroup.com",
   location: "Charlotte, NC · US Citizen",
 
-  headline: ["I engineer calm,", "AI-powered products", "from idea to shipped."],
+  headline: {
+    lead: "I engineer",
+    // The first word flips through these (split-flap style) every 5s.
+    // Keep them the same length for the cleanest look.
+    rotate: ["calm", "bold", "fast", "real", "lean"],
+    rest: ["AI-powered products", "from idea to shipped."],
+  },
   intro:
     "Lead software engineer with 8+ years building enterprise systems for banking, healthcare, and information services — and the founder of GlassFocus. Java & Spring on the backend, React & Angular up front, AI models wired in where they earn their place.",
 
