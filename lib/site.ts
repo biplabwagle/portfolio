@@ -8,7 +8,7 @@ export const site = {
   name: "Biplab Wagle",
   initials: "BW",
   role: "Lead Software Engineer · Full-Stack & AI · Founder",
-  email: "biplab@waglegroup.com",
+  email: "biplabwagle@gmail.com",
   location: "Charlotte, NC · US Citizen",
 
   headline: {
