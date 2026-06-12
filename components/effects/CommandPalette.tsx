@@ -67,7 +67,7 @@ export function CommandPalette() {
       { id: "l-gf", label: "Open GlassFocus", group: "Links", keywords: "app product", perform: link(site.socials.glassfocus) },
       { id: "l-as", label: "Open on the App Store", group: "Links", keywords: "ios", perform: link(site.socials.appstore) },
       { id: "l-x", label: "Open X / Twitter", group: "Links", keywords: "social bipz17", perform: link(site.socials.twitter) },
-      { id: "l-li", label: "Open LinkedIn", group: "Links", keywords: "social work", perform: link(site.socials.linkedin) },
+      { id: "l-gh", label: "Open GitHub", group: "Links", keywords: "social code repo", perform: link(site.socials.github) },
       {
         id: "l-mail",
         label: `Email ${site.email}`,

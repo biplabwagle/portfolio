@@ -7,7 +7,7 @@ const links = [
   { label: "GlassFocus", href: site.socials.glassfocus },
   { label: "App Store", href: site.socials.appstore },
   { label: "X / Twitter", href: site.socials.twitter },
-  { label: "LinkedIn", href: site.socials.linkedin },
+  { label: "GitHub", href: site.socials.github },
 ];
 
 export function Contact() {

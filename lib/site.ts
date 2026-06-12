@@ -20,8 +20,7 @@ export const site = {
     appstore: "https://apps.apple.com/se/app/glassfocus-focus-todos/id6757988398",
     twitter: "https://twitter.com/bipz17",
     linkedin: "https://www.linkedin.com/in/biplab-wagle-3953ba119/",
-    // TODO: add your GitHub if you have one
-    github: "https://github.com/",
+    github: "https://github.com/biplabwagle",
   },
 } as const;
 
