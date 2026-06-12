@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Gamepad2, X } from "lucide-react";
 
 /* ---------------------------------------------------------------------------
@@ -37,6 +37,9 @@ export function SnakeGame() {
   const [high, setHigh] = useState(0);
   const [nudge, setNudge] = useState(false);
   const [boardSize, setBoardSize] = useState(300);
+  const reduceMotion = useReducedMotion();
+  const nudgeRef = useRef(false);
+  nudgeRef.current = nudge;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const boardWrapRef = useRef<HTMLDivElement>(null);
@@ -91,35 +94,57 @@ export function SnakeGame() {
     };
     window.addEventListener("keydown", onType);
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let idle: ReturnType<typeof setTimeout>;
+    // Idle detection via a polling check + movement thresholds, so spurious
+    // zero-delta scroll/mousemove events (Lenis, sticky layers, etc.) don't
+    // keep resetting the timer. After ~22s of genuine inactivity, nudge.
+    let lastActivity = performance.now();
+    let lastShown = -Infinity;
+    let lx = -1;
+    let ly = -1;
+    let lsy = window.scrollY;
     let hide: ReturnType<typeof setTimeout>;
-    const arm = () => {
-      clearTimeout(idle);
-      if (reduce || document.hidden) return;
-      idle = setTimeout(() => {
-        try {
-          if (sessionStorage.getItem("bw-snake-nudged")) return;
-        } catch {}
-        if (openRef.current) return;
-        setNudge(true);
-        try {
-          sessionStorage.setItem("bw-snake-nudged", "1");
-        } catch {}
-        hide = setTimeout(() => setNudge(false), 9000);
-      }, 32000);
+    const bump = () => {
+      lastActivity = performance.now();
     };
-    const evts = ["mousemove", "keydown", "scroll", "pointerdown", "touchstart"];
-    evts.forEach((e) => window.addEventListener(e, arm, { passive: true }));
-    document.addEventListener("visibilitychange", arm);
-    arm();
+    const onMove = (e: MouseEvent) => {
+      if (Math.abs(e.clientX - lx) > 6 || Math.abs(e.clientY - ly) > 6) {
+        lx = e.clientX;
+        ly = e.clientY;
+        bump();
+      }
+    };
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (Math.abs(y - lsy) > 2) {
+        lsy = y;
+        bump();
+      }
+    };
+    window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("keydown", bump);
+    window.addEventListener("pointerdown", bump, { passive: true });
+    window.addEventListener("touchstart", bump, { passive: true });
+    const check = setInterval(() => {
+      if (document.hidden || openRef.current || nudgeRef.current) return;
+      const now = performance.now();
+      if (now - lastShown < 120000) return; // re-showable, never naggy
+      if (now - lastActivity >= 22000) {
+        lastShown = now;
+        setNudge(true);
+        hide = setTimeout(() => setNudge(false), 10000);
+      }
+    }, 1500);
 
     return () => {
       window.removeEventListener("open-snake", onOpen);
       window.removeEventListener("keydown", onType);
-      evts.forEach((e) => window.removeEventListener(e, arm));
-      document.removeEventListener("visibilitychange", arm);
-      clearTimeout(idle);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("keydown", bump);
+      window.removeEventListener("pointerdown", bump);
+      window.removeEventListener("touchstart", bump);
+      clearInterval(check);
       clearTimeout(hide);
     };
   }, [openGame]);
@@ -426,11 +451,11 @@ export function SnakeGame() {
       <AnimatePresence>
         {nudge && !open ? (
           <motion.div
-            initial={{ opacity: 0, y: 16, scale: 0.95 }}
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.95 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 320, damping: 26 }}
-            className="menu-panel fixed bottom-5 left-5 z-[60] flex items-center gap-3 rounded-2xl px-4 py-3"
+            className="menu-panel fixed bottom-5 left-5 z-[60] flex max-w-[calc(100vw-2.5rem)] items-center gap-3 rounded-2xl px-4 py-3"
           >
             <span className="text-lg">🐍</span>
             <button

@@ -1,4 +1,5 @@
 import { navLinks, site } from "@/lib/site";
+import { PlaySnakeButton } from "@/components/effects/PlaySnakeButton";
 
 export function Footer() {
   return (
@@ -33,14 +34,17 @@ export function Footer() {
             © {new Date().getFullYear()} {site.name}. Crafted with Next.js,
             Tailwind & a little AI.
           </p>
-          <p className="font-mono">
-            Press{" "}
-            <kbd className="rounded border border-[var(--color-border)] bg-surface px-1.5 py-0.5 text-[10px] text-muted">
-              ⌘K
-            </kbd>{" "}
-            · try the{" "}
-            <span className="text-muted">↑↑↓↓←→←→BA</span> code
-          </p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono">
+            <PlaySnakeButton className="text-faint transition-colors hover:text-fg" />
+            <p>
+              Press{" "}
+              <kbd className="rounded border border-[var(--color-border)] bg-surface px-1.5 py-0.5 text-[10px] text-muted">
+                ⌘K
+              </kbd>{" "}
+              · try the{" "}
+              <span className="text-muted">↑↑↓↓←→←→BA</span> code
+            </p>
+          </div>
         </div>
       </div>
     </footer>
