@@ -6,14 +6,14 @@ export function About() {
   return (
     <section id="about" className="relative mx-auto max-w-6xl px-6 py-24 sm:py-28">
       <SectionHeading
-        eyebrow="What I do"
+        eyebrow="How I help"
         title={
           <>
-            Four things I do{" "}
-            <span className="gradient-text">exceptionally well</span>.
+            Everything it takes to{" "}
+            <span className="gradient-text">take your idea live</span>.
           </>
         }
-        description="I work across the whole stack of shipping a product — the services that move the money, the interface people touch, the cloud it runs on, and the AI that powers it."
+        description="From the services that move the money to the interface people touch, the cloud it runs on, and the AI that powers it — I cover the whole stack so your product ships."
       />
 
       <div className="mt-14 grid gap-5 sm:grid-cols-2">
