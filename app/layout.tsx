@@ -108,7 +108,9 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="min-h-full">
+      {/* suppressHydrationWarning: browser extensions (ColorZilla, Grammarly,
+          etc.) inject attributes on <body> before React hydrates. */}
+      <body className="min-h-full" suppressHydrationWarning>
         <ThemeProvider>
           <Background />
           <FlowField />
