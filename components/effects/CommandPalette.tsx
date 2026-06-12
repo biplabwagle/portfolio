@@ -137,6 +137,22 @@ export function CommandPalette() {
       setActive(0);
       requestAnimationFrame(() => inputRef.current?.focus());
     }
+    // Lock the page while the palette is open — otherwise Lenis keeps eating
+    // wheel events and scrolls the page behind the dialog.
+    type LenisCtl = { stop: () => void; start: () => void };
+    const lenis = (window as unknown as { __lenis?: LenisCtl }).__lenis;
+    if (open) {
+      try {
+        lenis?.stop();
+      } catch {}
+      document.body.style.overflow = "hidden";
+      return () => {
+        try {
+          lenis?.start();
+        } catch {}
+        document.body.style.removeProperty("overflow");
+      };
+    }
   }, [open]);
 
   useEffect(() => setActive(0), [query]);
@@ -204,7 +220,11 @@ export function CommandPalette() {
               </kbd>
             </div>
 
-            <div ref={listRef} className="max-h-[52vh] overflow-y-auto p-2">
+            <div
+              ref={listRef}
+              data-lenis-prevent
+              className="max-h-[52vh] overflow-y-auto overscroll-contain p-2"
+            >
               {filtered.length === 0 ? (
                 <p className="px-3 py-8 text-center text-sm text-faint">
                   No matches for “{query}”.
