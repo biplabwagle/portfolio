@@ -25,7 +25,7 @@ export const site = {
     glassfocus: "https://www.glassfocus.app/",
     appstore: "https://apps.apple.com/se/app/glassfocus-focus-todos/id6757988398",
     twitter: "https://twitter.com/bipz17",
-    linkedin: "https://www.linkedin.com/in/biplab-wagle-3953ba119/",
+    linkedin: "https://www.linkedin.com/in/biplab-wagle-3953ba119",
     github: "https://github.com/biplabwagle",
   },
 } as const;

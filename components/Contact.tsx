@@ -8,6 +8,7 @@ const links = [
   { label: "App Store", href: site.socials.appstore },
   { label: "X / Twitter", href: site.socials.twitter },
   { label: "GitHub", href: site.socials.github },
+  { label: "LinkedIn", href: site.socials.linkedin },
 ];
 
 export function Contact() {
