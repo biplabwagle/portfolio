@@ -11,7 +11,7 @@
 [![Tailwind](https://img.shields.io/badge/Tailwind_v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
 
-[**Live site →**](https://waglegroup.web.app) · [GlassFocus](https://www.glassfocus.app/) · [App Store](https://apps.apple.com/se/app/glassfocus-focus-todos/id6757988398) · [LinkedIn](https://www.linkedin.com/in/biplab-wagle-3953ba119/) · [X](https://twitter.com/bipz17)
+[**Live site →**](https://waglegroup.web.app) · [GlassFocus](https://www.glassfocus.app/) · [App Store](https://apps.apple.com/us/app/glassfocus-focus-todos/id6757988398) · [LinkedIn](https://www.linkedin.com/in/biplab-wagle-3953ba119/) · [X](https://twitter.com/bipz17)
 
 </div>
 
