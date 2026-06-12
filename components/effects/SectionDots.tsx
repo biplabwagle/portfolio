@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { scrollToHash } from "@/lib/scrollTo";
 
 const SECTIONS = [
@@ -15,34 +15,65 @@ const SECTIONS = [
 
 export function SectionDots() {
   const [active, setActive] = useState("top");
-  const ratios = useRef<Record<string, number>>({});
 
   useEffect(() => {
-    const els = SECTIONS.map((s) => document.getElementById(s.id)).filter(
-      Boolean
-    ) as HTMLElement[];
-    if (!els.length) return;
+    let raf = 0;
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          ratios.current[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0;
-        }
-        let best = "top";
-        let bestR = -1;
-        for (const id in ratios.current) {
-          if (ratios.current[id] > bestR) {
-            bestR = ratios.current[id];
-            best = id;
-          }
-        }
-        setActive(best);
-      },
-      { threshold: [0.15, 0.4, 0.7], rootMargin: "-40% 0px -40% 0px" }
-    );
+    const compute = () => {
+      raf = 0;
+      // The "active" section is the last one whose top has scrolled above a
+      // reference line ~35% down the viewport. Height-independent, so tall
+      // sections track correctly (unlike intersectionRatio).
+      const lineY = window.innerHeight * 0.35;
+      let current = SECTIONS[0].id;
+      for (const s of SECTIONS) {
+        const el = document.getElementById(s.id);
+        if (el && el.getBoundingClientRect().top - lineY <= 0) current = s.id;
+      }
+      // Snap to the last section once the page is scrolled to the bottom
+      // (a short final section may never cross the line otherwise).
+      if (
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 2
+      ) {
+        current = SECTIONS[SECTIONS.length - 1].id;
+      }
+      setActive((prev) => (prev === current ? prev : current));
+    };
 
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(compute);
+    };
+
+    compute();
+    // Native fallback (reduced-motion / no Lenis) + resize.
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+
+    // Lenis drives smooth scroll but does NOT emit native "scroll" events, so
+    // subscribe to its own emitter. __lenis is set by SmoothScroll's effect,
+    // which may attach slightly after this one — retry briefly until it exists.
+    type Lenis = {
+      on: (e: string, cb: () => void) => void;
+      off: (e: string, cb: () => void) => void;
+    };
+    const getLenis = () => (window as unknown as { __lenis?: Lenis }).__lenis;
+    let retry = 0;
+    let retryTimer: ReturnType<typeof setTimeout> | undefined;
+    const attachLenis = () => {
+      const lenis = getLenis();
+      if (lenis?.on) lenis.on("scroll", onScroll);
+      else if (retry++ < 50) retryTimer = setTimeout(attachLenis, 100);
+    };
+    attachLenis();
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(raf);
+      if (retryTimer) clearTimeout(retryTimer);
+      getLenis()?.off?.("scroll", onScroll);
+    };
   }, []);
 
   return (
@@ -60,7 +91,7 @@ export function SectionDots() {
             aria-label={`Go to ${s.label}`}
             aria-current={isActive ? "true" : undefined}
             data-cursor-label={s.label}
-            className="group relative flex items-center justify-center"
+            className="group relative flex h-4 items-center justify-center"
           >
             <span
               className={`block rounded-full transition-all duration-300 ${
