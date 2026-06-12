@@ -11,6 +11,7 @@ type Ripple = { x: number; y: number; r: number; life: number };
 export function Cursor() {
   const interactive = useInteractive();
   const [visible, setVisible] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [variant, setVariant] = useState<Variant>("default");
   const [label, setLabel] = useState("");
 
@@ -34,10 +35,12 @@ export function Cursor() {
   const acc = useRef(0);
 
   const visibleRef = useRef(false);
+  const hiddenRef = useRef(false);
   const variantRef = useRef<Variant>("default");
   const labelRef = useRef("");
   variantRef.current = variant;
   labelRef.current = label;
+  hiddenRef.current = hidden;
 
   useEffect(() => {
     if (!interactive) return;
@@ -73,6 +76,10 @@ export function Cursor() {
         setVisible(true);
         visibleRef.current = true;
       }
+      // Hide the cursor entirely over opted-out areas (e.g. the Snake board).
+      const noCursor = (e.target as Element | null)?.closest?.("[data-no-cursor]");
+      if (!!noCursor !== hiddenRef.current) setHidden(!!noCursor);
+
       const el = (e.target as Element | null)?.closest?.(
         "a, button, [role='button'], [data-cursor], input, textarea, select, label"
       ) as HTMLElement | null;
@@ -210,7 +217,7 @@ export function Cursor() {
   return (
     <div
       className="pointer-events-none fixed inset-0 z-[100]"
-      style={{ opacity: visible ? 1 : 0, transition: "opacity 0.2s" }}
+      style={{ opacity: visible && !hidden ? 1 : 0, transition: "opacity 0.2s" }}
       aria-hidden
     >
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />

@@ -9,13 +9,14 @@ import { Gamepad2, X } from "lucide-react";
    "snake" type-code, or the idle "bored?" nudge. Eats the GlassFocus icon.
    All game state lives in refs (React state is frozen inside the RAF loop),
    reads theme colors live, keyboard + swipe controls, reduced-motion aware.
+   Responsive: full-screen on mobile, larger centered board on desktop. The
+   grid is drawn with PAD inset so edge/corner cells are never clipped.
 --------------------------------------------------------------------------- */
 
-const CELL = 18;
-const GRID = 19;
-const BOARD = CELL * GRID;
+const GRID = 21;
+const PAD = 14;
 const TICK_START = 135;
-const TICK_MIN = 68;
+const TICK_MIN = 66;
 
 type Cell = { x: number; y: number };
 type Status = "ready" | "playing" | "over";
@@ -35,8 +36,10 @@ export function SnakeGame() {
   const [score, setScore] = useState(0);
   const [high, setHigh] = useState(0);
   const [nudge, setNudge] = useState(false);
+  const [boardSize, setBoardSize] = useState(300);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const boardWrapRef = useRef<HTMLDivElement>(null);
   const openRef = useRef(false);
 
   // Engine state (refs — never read React state inside the RAF loop).
@@ -50,6 +53,8 @@ export function SnakeGame() {
   const tick = useRef(TICK_START);
   const last = useRef(0);
   const raf = useRef(0);
+  const cell = useRef(20);
+  const sizePx = useRef(380);
   const img = useRef<HTMLImageElement | null>(null);
   const ctl = useRef<{ start: () => void } | null>(null);
 
@@ -76,7 +81,6 @@ export function SnakeGame() {
     const onOpen = () => openGame();
     window.addEventListener("open-snake", onOpen);
 
-    // Secret: type "snake" anywhere (not while typing in an input).
     let buf = "";
     const onType = (e: KeyboardEvent) => {
       const el = document.activeElement;
@@ -87,7 +91,6 @@ export function SnakeGame() {
     };
     window.addEventListener("keydown", onType);
 
-    // Idle "bored?" nudge — once per session, reduced-motion-safe.
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let idle: ReturnType<typeof setTimeout>;
     let hide: ReturnType<typeof setTimeout>;
@@ -127,22 +130,43 @@ export function SnakeGame() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d")!;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = BOARD * dpr;
-    canvas.height = BOARD * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     let iris: number[] = [129, 140, 248];
     let cyan: number[] = [34, 211, 238];
+    let accent: number[] = iris;
     let line = "rgba(255,255,255,0.06)";
     const readColors = () => {
       const s = getComputedStyle(document.documentElement);
       iris = hexToRgb(s.getPropertyValue("--color-iris") || "#818cf8");
       cyan = hexToRgb(s.getPropertyValue("--color-cyan") || "#22d3ee");
+      accent = iris;
       const fg = hexToRgb(s.getPropertyValue("--color-fg") || "#ededf2");
       line = `rgba(${fg.join(",")},0.07)`;
     };
     readColors();
+
+    const sizeCanvas = () => {
+      const mobile = window.innerWidth < 640;
+      let avail: number;
+      if (mobile && boardWrapRef.current) {
+        // Measure the real available area so the board never overflows/clips.
+        const r = boardWrapRef.current.getBoundingClientRect();
+        avail = Math.max(220, Math.min(r.width, r.height));
+      } else {
+        avail = Math.min(560, window.innerHeight - 230);
+      }
+      const c = Math.max(13, Math.floor((avail - PAD * 2) / GRID));
+      cell.current = c;
+      const px = c * GRID + PAD * 2;
+      sizePx.current = px;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(px * dpr);
+      canvas.height = Math.round(px * dpr);
+      canvas.style.width = px + "px";
+      canvas.style.height = px + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      setBoardSize(px);
+    };
 
     const round = (x: number, y: number, w: number, h: number, r: number) => {
       ctx.beginPath();
@@ -155,52 +179,71 @@ export function SnakeGame() {
     };
 
     const draw = () => {
-      ctx.clearRect(0, 0, BOARD, BOARD);
-      // faint grid
+      const c = cell.current;
+      const S = sizePx.current;
+      const span = GRID * c;
+      ctx.clearRect(0, 0, S, S);
+
+      // grid
       ctx.strokeStyle = line;
       ctx.lineWidth = 1;
-      for (let i = 1; i < GRID; i++) {
+      for (let i = 0; i <= GRID; i++) {
+        const p = Math.round(PAD + i * c) + 0.5;
         ctx.beginPath();
-        ctx.moveTo(i * CELL, 0);
-        ctx.lineTo(i * CELL, BOARD);
-        ctx.moveTo(0, i * CELL);
-        ctx.lineTo(BOARD, i * CELL);
+        ctx.moveTo(PAD, p);
+        ctx.lineTo(PAD + span, p);
+        ctx.moveTo(p, PAD);
+        ctx.lineTo(p, PAD + span);
         ctx.stroke();
       }
+      // playfield wall
+      ctx.strokeStyle = `rgba(${accent.join(",")},0.4)`;
+      ctx.lineWidth = 2;
+      round(PAD - 3, PAD - 3, span + 6, span + 6, 10);
+      ctx.stroke();
+
       // food (GlassFocus icon)
       const f = food.current;
+      const fx = PAD + f.x * c;
+      const fy = PAD + f.y * c;
       if (img.current && img.current.complete && img.current.naturalWidth) {
-        ctx.drawImage(img.current, f.x * CELL + 1, f.y * CELL + 1, CELL - 2, CELL - 2);
+        const pad = c * 0.08;
+        ctx.drawImage(img.current, fx + pad, fy + pad, c - pad * 2, c - pad * 2);
       } else {
         ctx.fillStyle = mix(iris, cyan, 0.5);
-        round(f.x * CELL + 4, f.y * CELL + 4, CELL - 8, CELL - 8, 4);
+        round(fx + c * 0.2, fy + c * 0.2, c * 0.6, c * 0.6, 4);
         ctx.fill();
       }
+
       // snake
       const n = snake.current.length;
-      ctx.shadowColor = `rgba(${iris.join(",")},0.55)`;
-      ctx.shadowBlur = 8;
+      ctx.shadowColor = `rgba(${iris.join(",")},0.5)`;
+      ctx.shadowBlur = Math.min(10, c * 0.5);
+      const r = Math.max(3, c * 0.28);
       snake.current.forEach((seg, i) => {
         ctx.fillStyle = mix(iris, cyan, n < 2 ? 0 : i / (n - 1));
-        round(seg.x * CELL + 1.5, seg.y * CELL + 1.5, CELL - 3, CELL - 3, 5);
+        const x = PAD + seg.x * c;
+        const y = PAD + seg.y * c;
+        round(x + 1.5, y + 1.5, c - 3, c - 3, r);
         ctx.fill();
       });
       ctx.shadowBlur = 0;
     };
 
     const place = () => {
-      let c: Cell;
+      let p: Cell;
       do {
-        c = { x: (Math.random() * GRID) | 0, y: (Math.random() * GRID) | 0 };
-      } while (snake.current.some((s) => s.x === c.x && s.y === c.y));
-      food.current = c;
+        p = { x: (Math.random() * GRID) | 0, y: (Math.random() * GRID) | 0 };
+      } while (snake.current.some((s) => s.x === p.x && s.y === p.y));
+      food.current = p;
     };
 
     const reset = () => {
+      const m = (GRID / 2) | 0;
       snake.current = [
-        { x: 9, y: 9 },
-        { x: 8, y: 9 },
-        { x: 7, y: 9 },
+        { x: m, y: m },
+        { x: m - 1, y: m },
+        { x: m - 2, y: m },
       ];
       dir.current = { x: 1, y: 0 };
       queue.current = [];
@@ -231,13 +274,13 @@ export function SnakeGame() {
       const head = snake.current[0];
       const nx = head.x + dir.current.x;
       const ny = head.y + dir.current.y;
-      const last2 = snake.current.length - 1;
+      const lastIdx = snake.current.length - 1;
       if (
         nx < 0 ||
         ny < 0 ||
         nx >= GRID ||
         ny >= GRID ||
-        snake.current.some((c, i) => i < last2 && c.x === nx && c.y === ny)
+        snake.current.some((c, i) => i < lastIdx && c.x === nx && c.y === ny)
       ) {
         over();
         return;
@@ -288,6 +331,7 @@ export function SnakeGame() {
         queue.current.push(nd);
     };
 
+    sizeCanvas();
     statusRef.current = "ready";
     setStatus("ready");
     reset();
@@ -326,7 +370,7 @@ export function SnakeGame() {
       const dx = t.clientX - ts.x;
       const dy = t.clientY - ts.y;
       ts = null;
-      if (Math.hypot(dx, dy) < 14) return;
+      if (Math.hypot(dx, dy) < 16) return;
       queueDir(
         Math.abs(dx) > Math.abs(dy)
           ? { x: Math.sign(dx), y: 0 }
@@ -335,6 +379,17 @@ export function SnakeGame() {
     };
     canvas.addEventListener("touchstart", onTS, { passive: true });
     canvas.addEventListener("touchend", onTE, { passive: true });
+
+    const onResize = () => {
+      sizeCanvas();
+      draw();
+    };
+    window.addEventListener("resize", onResize);
+    const ro = new ResizeObserver(() => {
+      sizeCanvas();
+      draw();
+    });
+    if (boardWrapRef.current) ro.observe(boardWrapRef.current);
 
     const mo = new MutationObserver(() => {
       readColors();
@@ -353,6 +408,8 @@ export function SnakeGame() {
     return () => {
       cancelAnimationFrame(raf.current);
       window.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", onResize);
+      ro.disconnect();
       canvas.removeEventListener("touchstart", onTS);
       canvas.removeEventListener("touchend", onTE);
       mo.disconnect();
@@ -403,7 +460,7 @@ export function SnakeGame() {
       <AnimatePresence>
         {open ? (
           <motion.div
-            className="fixed inset-0 z-[96] flex items-center justify-center p-4"
+            className="fixed inset-0 z-[96] flex justify-center sm:items-center sm:p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -421,7 +478,7 @@ export function SnakeGame() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 14, scale: 0.97 }}
               transition={{ type: "spring", stiffness: 320, damping: 28 }}
-              className="menu-panel relative w-full max-w-[380px] rounded-3xl p-5"
+              className="menu-panel relative flex h-full w-full flex-col rounded-none p-4 sm:h-auto sm:max-h-[94vh] sm:w-auto sm:rounded-3xl sm:p-5"
             >
               <div className="mb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -436,7 +493,7 @@ export function SnakeGame() {
                   aria-label="Close"
                   className="rounded-lg p-1 text-faint hover:text-fg"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-5 w-5" />
                 </button>
               </div>
 
@@ -450,56 +507,57 @@ export function SnakeGame() {
               </div>
 
               <div
-                className="relative mx-auto overflow-hidden rounded-2xl border border-[var(--color-border)]"
-                style={{ width: BOARD, height: BOARD, maxWidth: "100%" }}
+                ref={boardWrapRef}
+                className="flex flex-1 items-center justify-center overflow-hidden"
               >
-                <canvas
-                  ref={canvasRef}
-                  className="block h-full w-full touch-none"
-                  style={{ width: BOARD, height: BOARD }}
-                />
-                <AnimatePresence>
-                  {status !== "playing" ? (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="absolute inset-0 grid place-items-center bg-bg/55 backdrop-blur-[2px]"
-                    >
-                      <div className="text-center">
-                        {status === "over" ? (
-                          <>
-                            <p className="text-lg font-semibold text-fg">
-                              Game over
+                <div
+                  data-no-cursor
+                  className="relative overflow-hidden rounded-xl"
+                  style={{ width: boardSize, height: boardSize, maxWidth: "100%" }}
+                >
+                  <canvas ref={canvasRef} className="block touch-none" />
+                  <AnimatePresence>
+                    {status !== "playing" ? (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute inset-0 grid place-items-center bg-bg/55 backdrop-blur-[2px]"
+                      >
+                        <div className="text-center">
+                          {status === "over" ? (
+                            <>
+                              <p className="text-lg font-semibold text-fg">
+                                Game over
+                              </p>
+                              <p className="mt-1 text-sm text-muted">
+                                You fed {score} hourglass{score === 1 ? "" : "es"}.
+                              </p>
+                            </>
+                          ) : (
+                            <p className="text-sm text-muted">
+                              Eat the GlassFocus hourglass.
                             </p>
-                            <p className="mt-1 text-sm text-muted">
-                              You fed {score} hourglass{score === 1 ? "" : "es"}.
-                            </p>
-                          </>
-                        ) : (
-                          <p className="text-sm text-muted">
-                            Eat the GlassFocus hourglass.
-                          </p>
-                        )}
-                        <button
-                          type="button"
-                          onClick={() => ctl.current?.start()}
-                          data-cursor-label="Go"
-                          className="mt-4 inline-flex items-center gap-2 rounded-xl bg-fg px-4 py-2 text-sm font-medium text-bg transition-transform hover:scale-[1.03]"
-                        >
-                          {status === "over" ? "Play again" : "Start"}
-                        </button>
-                      </div>
-                    </motion.div>
-                  ) : null}
-                </AnimatePresence>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => ctl.current?.start()}
+                            className="mt-4 inline-flex items-center gap-2 rounded-xl bg-fg px-5 py-2.5 text-sm font-medium text-bg transition-transform hover:scale-[1.03]"
+                          >
+                            {status === "over" ? "Play again" : "Start"}
+                          </button>
+                        </div>
+                      </motion.div>
+                    ) : null}
+                  </AnimatePresence>
+                </div>
               </div>
 
               <p className="mt-4 text-center text-xs text-faint">
                 <span className="hidden sm:inline">
                   Arrow keys / WASD to move · Esc to close
                 </span>
-                <span className="sm:hidden">Swipe to move</span>
+                <span className="sm:hidden">Swipe to move · tap ✕ to close</span>
               </p>
             </motion.div>
           </motion.div>
