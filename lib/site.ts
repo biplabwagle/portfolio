@@ -19,10 +19,11 @@ export const site = {
     rest: ["AI-powered products", "from idea to shipped."],
   },
   intro:
-    "Lead software engineer with 8+ years building enterprise systems for banking, healthcare, and information services — and the founder of GlassFocus. Java & Spring on the backend, React & Angular up front, AI models wired in where they earn their place.",
+    "Lead software engineer with 8+ years building enterprise systems for banking, healthcare, and information services — and the maker behind GlassFocus and ToolsDeck. Java & Spring on the backend, React & Angular up front, AI models wired in where they earn their place.",
 
   socials: {
     glassfocus: "https://www.glassfocus.app/",
+    toolsdeck: "https://www.toolsdeck.app/",
     appstore: "https://apps.apple.com/us/app/glassfocus-focus-todos/id6757988398",
     twitter: "https://twitter.com/bipz17",
     linkedin: "https://www.linkedin.com/in/biplab-wagle-3953ba119",
@@ -215,6 +216,10 @@ export type Project = {
   href?: string;
   featured?: boolean;
   status?: string;
+  /** Featured cards show an icon + caption in the side panel. */
+  icon?: string;
+  iconAlt?: string;
+  caption?: string;
 };
 
 export const projects: Project[] = [
@@ -227,6 +232,22 @@ export const projects: Project[] = [
     href: "https://www.glassfocus.app/",
     featured: true,
     status: "Live",
+    icon: "/glassfocus.png",
+    iconAlt: "GlassFocus app icon",
+    caption: "Calm, deep focus",
+  },
+  {
+    title: "ToolsDeck",
+    category: "Product · Maker",
+    description:
+      "47 free, private, browser-based tools for developers & creators — a thumbnail maker, subtitle editor, teleprompter, PDF merge/split, image compression & redaction, plus JSON / regex / JWT and hashing & encryption. 100% client-side: nothing is ever uploaded.",
+    tags: ["Client-side", "Privacy-first", "Developer tools", "Web"],
+    href: "https://www.toolsdeck.app/",
+    featured: true,
+    status: "Live",
+    icon: "/toolsdeck.svg",
+    iconAlt: "ToolsDeck logo",
+    caption: "47 tools · zero uploads",
   },
   {
     title: "Enterprise Platform Modernization",

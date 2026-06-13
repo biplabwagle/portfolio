@@ -65,6 +65,7 @@ export function CommandPalette() {
     }));
     const links: Cmd[] = [
       { id: "l-gf", label: "Open GlassFocus", group: "Links", keywords: "app product", perform: link(site.socials.glassfocus) },
+      { id: "l-td", label: "Open ToolsDeck", group: "Links", keywords: "tools utilities web app product", perform: link(site.socials.toolsdeck) },
       { id: "l-as", label: "Open on the App Store", group: "Links", keywords: "ios", perform: link(site.socials.appstore) },
       { id: "l-x", label: "Open X / Twitter", group: "Links", keywords: "social bipz17", perform: link(site.socials.twitter) },
       { id: "l-gh", label: "Open GitHub", group: "Links", keywords: "social code repo", perform: link(site.socials.github) },

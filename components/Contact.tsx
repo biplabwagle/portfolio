@@ -5,6 +5,7 @@ import { Magnetic } from "./effects/Magnetic";
 
 const links = [
   { label: "GlassFocus", href: site.socials.glassfocus },
+  { label: "ToolsDeck", href: site.socials.toolsdeck },
   { label: "App Store", href: site.socials.appstore },
   { label: "X / Twitter", href: site.socials.twitter },
   { label: "GitHub", href: site.socials.github },

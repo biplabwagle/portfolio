@@ -80,20 +80,22 @@ export function Work() {
                   </ul>
                 </div>
 
-                {p.featured ? (
+                {p.featured && p.icon ? (
                   <div className="panel-glow mt-7 grid w-full place-items-center rounded-2xl border border-[var(--color-border)] py-10 md:mt-0 md:w-80 md:py-14">
                     <div className="flex flex-col items-center text-center">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src="/glassfocus.png"
-                        alt="GlassFocus app icon"
+                        src={p.icon}
+                        alt={p.iconAlt ?? `${p.title} icon`}
                         width={80}
                         height={80}
                         className="accent-glow h-20 w-20 rounded-3xl"
                       />
-                      <p className="mt-4 font-mono text-xs uppercase tracking-[0.25em] text-faint">
-                        Calm, deep focus
-                      </p>
+                      {p.caption ? (
+                        <p className="mt-4 font-mono text-xs uppercase tracking-[0.25em] text-faint">
+                          {p.caption}
+                        </p>
+                      ) : null}
                     </div>
                   </div>
                 ) : null}
