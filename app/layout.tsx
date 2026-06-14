@@ -85,12 +85,22 @@ export const metadata: Metadata = {
     description: site.intro,
     type: "website",
     siteName: site.name,
+    url: "https://waglegroup.com",
+    images: [
+      {
+        url: "/og.png",
+        width: 1600,
+        height: 840,
+        alt: `${site.name} — ${site.role}`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${site.name} — ${site.role}`,
     description: site.intro,
     creator: "@bipz17",
+    images: ["/og.png"],
   },
 };
 

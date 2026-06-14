@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { site, stats } from "@/lib/site";
-import { FocusRing } from "./FocusRing";
 import { Magnetic } from "./effects/Magnetic";
 import { Tilt } from "./effects/Tilt";
 import { FlipWord } from "./effects/FlipWord";
@@ -128,71 +127,66 @@ export function Hero() {
             <div className="card-sheen gradient-border rounded-3xl glass-strong p-6 shadow-(--t-card-glow)">
               <div className="flex items-center justify-between">
                 <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-faint">
-                  Now playing
+                  Shipped &amp; live
                 </span>
                 <span className="rounded-full bg-surface-2 px-2 py-0.5 font-mono text-[10px] text-iris">
-                  FOCUS
+                  2 PRODUCTS
                 </span>
               </div>
 
-              <div className="mt-4 grid place-items-center">
-                <FocusRing size={208} progress={0.68} label="24:18" caption="Deep work" />
-              </div>
-
-              <div className="mt-5 space-y-2">
+              <div className="mt-5 space-y-3">
                 {[
-                  { t: "Ship portfolio v1", done: true },
-                  { t: "Wire up AI agent", done: false },
-                ].map((task) => (
-                  <div
-                    key={task.t}
-                    className="flex items-center gap-3 rounded-xl bg-surface px-3 py-2.5"
+                  {
+                    name: "GlassFocus",
+                    icon: "/glassfocus.png",
+                    blurb: "Pomodoro focus app · iPhone · iPad · Mac",
+                    href: site.socials.appstore,
+                    label: "App Store",
+                  },
+                  {
+                    name: "ToolsDeck",
+                    icon: "/toolsdeck.svg",
+                    blurb: "47 private, client-side web tools",
+                    href: site.socials.toolsdeck,
+                    label: "Open",
+                  },
+                ].map((p) => (
+                  <a
+                    key={p.name}
+                    href={p.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    data-cursor-label={p.label}
+                    className="hover-lift group flex items-center gap-4 rounded-2xl border border-[var(--color-border)] bg-surface p-3.5"
                   >
-                    <span
-                      className={`grid h-4 w-4 place-items-center rounded-md border ${
-                        task.done
-                          ? "border-transparent bg-gradient-to-br from-iris to-cyan"
-                          : "border-[var(--color-border-strong)]"
-                      }`}
-                    >
-                      {task.done ? (
-                        <svg viewBox="0 0 12 12" className="h-3 w-3 text-bg">
-                          <path
-                            d="M2.5 6.2l2.2 2.3L9.5 3.7"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.8"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      ) : null}
-                    </span>
-                    <span
-                      className={`text-sm ${
-                        task.done ? "text-faint line-through" : "text-fg"
-                      }`}
-                    >
-                      {task.t}
-                    </span>
-                  </div>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={p.icon}
+                      alt=""
+                      width={48}
+                      height={48}
+                      className="h-12 w-12 shrink-0 rounded-2xl"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-fg">{p.name}</span>
+                        <span className="inline-flex items-center gap-1 text-[10px] font-medium text-muted">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                          Live
+                        </span>
+                      </div>
+                      <p className="mt-0.5 truncate text-xs text-muted">
+                        {p.blurb}
+                      </p>
+                    </div>
+                    <ArrowUpRight className="h-4 w-4 shrink-0 text-faint transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </a>
                 ))}
               </div>
 
-              <div className="mt-4 flex items-center gap-2">
-                {["Rain", "Café", "Forest"].map((s, i) => (
-                  <span
-                    key={s}
-                    className={`rounded-full px-3 py-1 text-[11px] ${
-                      i === 0
-                        ? "bg-gradient-to-r from-iris/30 to-cyan/20 text-fg"
-                        : "bg-surface text-muted"
-                    }`}
-                  >
-                    {s}
-                  </span>
-                ))}
-              </div>
+              <p className="mt-4 text-center font-mono text-[11px] uppercase tracking-[0.2em] text-faint">
+                Designed, built &amp; shipped end-to-end
+              </p>
             </div>
           </Tilt>
         </motion.div>
