@@ -62,6 +62,7 @@ const themeInitScript = `(function(){try{var v=["glass","editorial","terminal","
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://waglegroup.com"),
+  alternates: { canonical: "/" },
   title: {
     default: `${site.name} — ${site.role}`,
     template: `%s — ${site.name}`,
@@ -104,6 +105,44 @@ export const metadata: Metadata = {
   },
 };
 
+// Structured data so Google (and AI crawlers) can resolve this site to the
+// person "Biplab Wagle" and link it to his profiles/products via sameAs.
+const personLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  url: "https://waglegroup.com",
+  jobTitle: "Lead Software Engineer",
+  description: site.intro,
+  email: `mailto:${site.email}`,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Charlotte",
+    addressRegion: "NC",
+    addressCountry: "US",
+  },
+  knowsAbout: [
+    "Software Engineering",
+    "Full-Stack Development",
+    "Java",
+    "Spring Boot",
+    "React",
+    "Next.js",
+    "TypeScript",
+    "Artificial Intelligence",
+    "Large Language Models",
+    "Cloud Computing",
+  ],
+  sameAs: [
+    site.socials.github,
+    site.socials.linkedin,
+    site.socials.twitter,
+    site.socials.glassfocus,
+    site.socials.toolsdeck,
+    site.socials.appstore,
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -121,6 +160,12 @@ export default function RootLayout({
       {/* suppressHydrationWarning: browser extensions (ColorZilla, Grammarly,
           etc.) inject attributes on <body> before React hydrates. */}
       <body className="min-h-full" suppressHydrationWarning>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(personLd).replace(/</g, "\\u003c"),
+          }}
+        />
         <ThemeProvider>
           <Background />
           <FlowField />
