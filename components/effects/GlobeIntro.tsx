@@ -67,6 +67,11 @@ const FLAT = 1200;
 const FADE = 450;
 const TOTAL = SPIN + FLAT + FADE;
 
+// Play the unfold once per browser session. First impression keeps the wow;
+// reloads / back-navigation within the session go straight to content instead
+// of re-watching a ~3.6s scroll-locked intro. Theme-change replays are exempt.
+const SEEN_KEY = "bw-globe-intro-seen";
+
 const easeSine = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
@@ -348,7 +353,19 @@ export function GlobeIntro() {
       play(true);
     };
 
-    play(false);
+    let seen = false;
+    try {
+      seen = sessionStorage.getItem(SEEN_KEY) === "1";
+    } catch {}
+    if (seen) {
+      // Already played this session — leave the canvas hidden, page scrolls free.
+      canvas.style.display = "none";
+    } else {
+      try {
+        sessionStorage.setItem(SEEN_KEY, "1");
+      } catch {}
+      play(false);
+    }
     window.addEventListener("theme-change", onThemeChange);
 
     return () => {
