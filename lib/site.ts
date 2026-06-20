@@ -239,14 +239,14 @@ export const projects: Project[] = [
     title: "ToolsDeck",
     category: "Product · Maker",
     description:
-      "47 free, private, browser-based tools for developers & creators — a thumbnail maker, subtitle editor, teleprompter, PDF merge/split, image compression & redaction, plus JSON / regex / JWT and hashing & encryption. 100% client-side: nothing is ever uploaded.",
+      "102 free, private, browser-based tools for developers & creators — PDF merge/split, image compression & redaction, JSON / regex / JWT, QR & barcode, hashing & encryption, transcription, and more. 100% client-side: nothing is ever uploaded.",
     tags: ["Client-side", "Privacy-first", "Developer tools", "Web"],
     href: "https://www.toolsdeck.app/",
     featured: true,
     status: "Live",
     icon: "/toolsdeck.svg",
     iconAlt: "ToolsDeck logo",
-    caption: "47 tools · zero uploads",
+    caption: "102 tools · zero uploads",
   },
   {
     title: "Enterprise Platform Modernization",

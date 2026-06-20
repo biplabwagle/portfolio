@@ -146,7 +146,7 @@ export function Hero() {
                   {
                     name: "ToolsDeck",
                     icon: "/toolsdeck.svg",
-                    blurb: "47 private, client-side web tools",
+                    blurb: "102 private, client-side web tools",
                     href: site.socials.toolsdeck,
                     label: "Open",
                   },
