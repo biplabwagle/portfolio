@@ -42,14 +42,14 @@ export function Contact() {
             </Magnetic>
           </div>
 
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-x-1 gap-y-1">
             {links.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 target="_blank"
                 rel="noreferrer"
-                className="group inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-fg"
+                className="group inline-flex min-h-[44px] items-center gap-1 rounded-lg px-3 py-2 text-sm text-muted transition-colors hover:bg-surface hover:text-fg"
               >
                 {link.label}
                 <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

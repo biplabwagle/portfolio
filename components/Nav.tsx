@@ -4,11 +4,16 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight, Command, Menu, X } from "lucide-react";
 import { navLinks, site } from "@/lib/site";
+import { useActiveSection } from "@/lib/useActiveSection";
 import { Magnetic } from "./effects/Magnetic";
+
+// "top" sentinel first → no link highlights while still in the hero.
+const NAV_IDS = ["top", ...navLinks.map((l) => l.href.replace("#", ""))];
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const active = useActiveSection(NAV_IDS, "top");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -23,10 +28,10 @@ export function Nav() {
         initial={{ y: -24, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className={`flex w-full max-w-5xl items-center justify-between rounded-2xl px-4 py-2.5 transition-all duration-500 ${
+        className={`flex w-full max-w-5xl items-center justify-between rounded-2xl border border-transparent px-4 py-2.5 transition-all duration-500 ${
           scrolled
             ? "nav-glass shadow-[0_8px_40px_-16px_rgba(0,0,0,0.35)]"
-            : "border border-transparent bg-transparent"
+            : "bg-bg/40 backdrop-blur-sm"
         }`}
       >
         <a
@@ -43,15 +48,21 @@ export function Nav() {
         </a>
 
         <div className="hidden items-center gap-1 md:flex">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="rounded-lg px-3 py-2 text-sm text-muted transition-colors hover:text-fg"
-            >
-              {link.label}
-            </a>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = active === link.href.replace("#", "");
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                aria-current={isActive ? "page" : undefined}
+                className={`rounded-lg px-3 py-2 text-sm transition-colors ${
+                  isActive ? "bg-surface text-fg" : "text-muted hover:text-fg"
+                }`}
+              >
+                {link.label}
+              </a>
+            );
+          })}
         </div>
 
         <div className="flex items-center gap-2">
@@ -97,16 +108,24 @@ export function Nav() {
             transition={{ duration: 0.25 }}
             className="menu-panel absolute inset-x-4 top-20 z-50 rounded-2xl p-2 md:hidden"
           >
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="block rounded-xl px-4 py-3 text-sm text-muted transition-colors hover:bg-surface hover:text-fg"
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = active === link.href.replace("#", "");
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`block rounded-xl px-4 py-3 text-sm transition-colors ${
+                    isActive
+                      ? "bg-surface text-fg"
+                      : "text-muted hover:bg-surface hover:text-fg"
+                  }`}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
             <a
               href="#contact"
               onClick={() => setOpen(false)}
