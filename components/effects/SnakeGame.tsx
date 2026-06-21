@@ -608,7 +608,9 @@ export function SnakeGame() {
                 className="flex flex-1 items-center justify-center overflow-hidden"
               >
                 <div
-                  data-no-cursor
+                  // Hide the custom cursor over the board only while actually
+                  // playing — keep it visible on the Start / Game-over screens.
+                  data-no-cursor={status === "playing" ? "" : undefined}
                   className="relative overflow-hidden rounded-xl"
                   style={{ width: boardSize, height: boardSize, maxWidth: "100%" }}
                 >
