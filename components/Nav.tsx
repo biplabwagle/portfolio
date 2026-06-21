@@ -31,7 +31,7 @@ export function Nav() {
         className={`flex w-full max-w-5xl items-center justify-between rounded-2xl border border-transparent px-4 py-2.5 transition-all duration-500 ${
           scrolled
             ? "nav-glass shadow-[0_8px_40px_-16px_rgba(0,0,0,0.35)]"
-            : "bg-bg/40 backdrop-blur-sm"
+            : "bg-bg/40 backdrop-blur-md"
         }`}
       >
         <a

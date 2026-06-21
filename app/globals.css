@@ -44,8 +44,13 @@
   --t-grad-2: #818cf8;
   --t-grad-3: #22d3ee;
 
-  --t-blur: 16px;
+  --t-blur: 20px;
   --t-card-border-w: 1px;
+  /* Specular rim that reads as a lit glass edge. Light themes override below. */
+  --t-glass-edge: inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 10px 28px -18px rgba(255, 255, 255, 0.14);
+  /* Extra blur applied only at the perimeter ring (the liquid-glass edge). */
+  --t-edge-blur: 6px;
   --t-card-shadow: none;
   --t-card-glow: 0 30px 80px -40px rgba(99, 102, 241, 0.6);
   --t-accent-glow: 0 8px 30px -8px rgba(129, 140, 248, 0.6);
@@ -99,7 +104,9 @@
   --t-grad-2: #be123c;
   --t-grad-3: #fb7185;
 
-  --t-blur: 0px;
+  --t-blur: 12px;
+  --t-glass-edge: inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -10px 24px -18px rgba(20, 20, 24, 0.07);
   --t-card-shadow: 0 1px 2px rgba(20, 20, 24, 0.04);
   --t-card-glow: 0 24px 60px -30px rgba(20, 20, 24, 0.25);
   --t-accent-glow: 0 8px 24px -10px rgba(225, 29, 72, 0.5);
@@ -158,6 +165,7 @@
   --t-grad-3: #a7f3d0;
 
   --t-blur: 0px;
+  --t-glass-edge: 0 0 transparent; /* phosphor/flat — no glass edge */
   --t-card-shadow: inset 0 0 24px rgba(51, 255, 153, 0.03);
   --t-card-glow: 0 0 50px -12px rgba(34, 197, 94, 0.35);
   --t-accent-glow: 0 0 24px -4px rgba(34, 197, 94, 0.6);
@@ -216,6 +224,7 @@
 
   --t-blur: 0px;
   --t-card-border-w: 2px;
+  --t-glass-edge: 0 0 transparent; /* hard/flat brutalist — no glass edge */
   --t-card-shadow: 5px 5px 0 #141414;
   --t-card-glow: 8px 8px 0 #141414;
   --t-accent-glow: 4px 4px 0 #141414;
@@ -273,7 +282,9 @@
   --t-grad-2: #ff5e78;
   --t-grad-3: #ffb35c;
 
-  --t-blur: 14px;
+  --t-blur: 16px;
+  --t-glass-edge: inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -10px 24px -18px rgba(178, 90, 70, 0.07);
   --t-card-shadow: 0 16px 40px -20px rgba(255, 120, 90, 0.35);
   --t-card-glow: 0 30px 70px -30px rgba(255, 94, 120, 0.5);
   --t-accent-glow: 0 10px 28px -8px rgba(255, 94, 120, 0.55);
@@ -492,33 +503,55 @@ h1, h2, h3, h4, h5, h6 {
 ============================================================================ */
 .glass {
   background: var(--color-surface);
-  backdrop-filter: blur(var(--t-blur)) saturate(140%);
-  -webkit-backdrop-filter: blur(var(--t-blur)) saturate(140%);
+  backdrop-filter: blur(var(--t-blur)) saturate(150%) brightness(1.05);
+  -webkit-backdrop-filter: blur(var(--t-blur)) saturate(150%) brightness(1.05);
   border: var(--t-card-border-w) solid var(--color-border);
-  box-shadow: var(--t-card-shadow);
+  box-shadow: var(--t-card-shadow), var(--t-glass-edge);
 }
 
 .glass-strong {
   background: var(--color-surface-2);
-  backdrop-filter: blur(calc(var(--t-blur) * 1.4)) saturate(150%);
-  -webkit-backdrop-filter: blur(calc(var(--t-blur) * 1.4)) saturate(150%);
+  backdrop-filter: blur(calc(var(--t-blur) * 1.5)) saturate(160%) brightness(1.06);
+  -webkit-backdrop-filter: blur(calc(var(--t-blur) * 1.5)) saturate(160%)
+    brightness(1.06);
   border: var(--t-card-border-w) solid var(--color-border-strong);
-  box-shadow: var(--t-card-shadow);
+  box-shadow: var(--t-card-shadow), var(--t-glass-edge);
 }
 
 .nav-glass {
+  position: relative;
   background: var(--t-nav-bg);
-  backdrop-filter: blur(18px) saturate(150%);
-  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(160%) brightness(1.06);
+  -webkit-backdrop-filter: blur(28px) saturate(160%) brightness(1.06);
   border: var(--t-card-border-w) solid var(--color-border-strong);
 }
 
 .menu-panel {
   background: var(--t-menu-bg);
   border: var(--t-card-border-w) solid var(--color-border-strong);
-  box-shadow: var(--t-card-glow);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  box-shadow: var(--t-card-glow), var(--t-glass-edge);
+  backdrop-filter: blur(30px) saturate(150%) brightness(1.05);
+  -webkit-backdrop-filter: blur(30px) saturate(150%) brightness(1.05);
+}
+
+/* Liquid-glass edge: a thin perimeter ring refracts the backdrop with extra
+   blur + brightness, so the very edge "stretches and blurs" more than the
+   frosted center. Masked to a ring via the same xor trick as .gradient-border;
+   sits in the border padding, away from content, and ignores pointer events.
+   No-ops on opaque themes (terminal/brutalist) since there's no backdrop. */
+.nav-glass::before,
+.menu-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  padding: var(--t-edge-blur, 6px);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  backdrop-filter: blur(8px) brightness(1.12) saturate(1.3);
+  -webkit-backdrop-filter: blur(8px) brightness(1.12) saturate(1.3);
 }
 
 .card-sheen {
@@ -718,7 +751,8 @@ html.custom-cursor [contenteditable="true"] {
   font-weight: 500;
 }
 [data-theme="editorial"] .glass {
-  box-shadow: 0 1px 0 rgba(20, 20, 24, 0.06), 0 12px 28px -20px rgba(20, 20, 24, 0.3);
+  box-shadow: 0 1px 0 rgba(20, 20, 24, 0.06),
+    0 12px 28px -20px rgba(20, 20, 24, 0.3), var(--t-glass-edge);
 }
 
 /* — Brutalist: stickered, slightly askew cards that straighten on hover — */
