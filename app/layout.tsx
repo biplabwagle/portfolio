@@ -58,7 +58,7 @@ const fontVars = [
 ].join(" ");
 
 // Applies the saved theme before first paint so there's no flash.
-const themeInitScript = `(function(){try{var v=["glass","editorial","terminal","brutalist","sunset","noir","neon"];var t=localStorage.getItem("bw-theme");document.documentElement.setAttribute("data-theme",v.indexOf(t)>-1?t:"glass");}catch(e){document.documentElement.setAttribute("data-theme","glass");}})();`;
+const themeInitScript = `(function(){try{var v=["glass","editorial","terminal","brutalist","sunset","noir","neon"];var t=localStorage.getItem("bw-theme");document.documentElement.setAttribute("data-theme",v.indexOf(t)>-1?t:"editorial");}catch(e){document.documentElement.setAttribute("data-theme","editorial");}})();`;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://waglegroup.com"),
@@ -151,6 +151,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-theme="editorial"
       className={`${fontVars} h-full antialiased`}
       suppressHydrationWarning
     >

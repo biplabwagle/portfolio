@@ -34,5 +34,5 @@ export const themes: ThemeMeta[] = [
   { id: "neon", name: "Cyberwave", tagline: "Electric neon", dots: ["#090015", "#ff2da0", "#00e5ff"] },
 ];
 
-export const DEFAULT_THEME: ThemeId = "glass";
+export const DEFAULT_THEME: ThemeId = "editorial";
 export const THEME_STORAGE_KEY = "bw-theme";
