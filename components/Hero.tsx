@@ -2,7 +2,8 @@
 
 import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { Apple, ArrowRight, ArrowUpRight, Play } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { AppStoreIcon, GooglePlayIcon } from "./ui/StoreIcons";
 import { site, stats } from "@/lib/site";
 import { Magnetic } from "./effects/Magnetic";
 import { Tilt } from "./effects/Tilt";
@@ -16,7 +17,7 @@ type HeroProduct = {
   blurb: string;
   href?: string;
   label?: string;
-  stores?: { label: string; href: string; Icon: typeof Apple }[];
+  stores?: { label: string; href: string; Icon: typeof AppStoreIcon }[];
 };
 
 export function Hero() {
@@ -151,8 +152,8 @@ export function Hero() {
                       icon: "/glassfocus.png",
                       blurb: "Pomodoro focus app · iOS · Android · Mac",
                       stores: [
-                        { label: "App Store", href: site.socials.appstore, Icon: Apple },
-                        { label: "Google Play", href: site.socials.googleplay, Icon: Play },
+                        { label: "App Store", href: site.socials.appstore, Icon: AppStoreIcon },
+                        { label: "Google Play", href: site.socials.googleplay, Icon: GooglePlayIcon },
                       ],
                     },
                     {
