@@ -11,7 +11,7 @@
 [![Tailwind](https://img.shields.io/badge/Tailwind_v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
 
-[**Live site →**](https://waglegroup.com) · [GlassFocus](https://www.glassfocus.app/) · [App Store](https://apps.apple.com/us/app/glassfocus-focus-todos/id6757988398) · [LinkedIn](https://www.linkedin.com/in/biplab-wagle-3953ba119/) · [X](https://twitter.com/bipz17)
+[**Live site →**](https://waglegroup.com) · [GlassFocus](https://www.glassfocus.app/) · [App Store](https://apps.apple.com/us/app/glassfocus-focus-todos/id6757988398) · [Google Play](https://play.google.com/store/apps/details?id=com.glassfocus.app) · [LinkedIn](https://www.linkedin.com/in/biplab-wagle-3953ba119/) · [X](https://twitter.com/bipz17)
 
 </div>
 
@@ -19,7 +19,7 @@
 
 ## ✦ Overview
 
-I'm **Biplab Wagle** — a Lead Software Engineer (8+ years across banking, healthcare & information services) and the founder of **[GlassFocus](https://www.glassfocus.app/)**, a cinematic deep‑work app on iPhone, iPad, Mac & web. This is my portfolio: a single, fully‑static site engineered to feel *alive* — calm and mesmerizing, in the spirit of GlassFocus, rather than flashy.
+I'm **Biplab Wagle** — a Lead Software Engineer (8+ years across banking, healthcare & information services) and the founder of **[GlassFocus](https://www.glassfocus.app/)**, a cinematic deep‑work app on iPhone, iPad, Mac, Android & web. This is my portfolio: a single, fully‑static site engineered to feel *alive* — calm and mesmerizing, in the spirit of GlassFocus, rather than flashy.
 
 It ships with **7 completely different switchable themes**, a research‑backed **immersive interaction layer**, and a signature **WebGL globe intro** — the live page wraps a spinning globe that unfolds, like Earth flattening into a map, on every load and every theme change.
 

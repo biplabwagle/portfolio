@@ -7,6 +7,7 @@ const links = [
   { label: "GlassFocus", href: site.socials.glassfocus },
   { label: "ToolsDeck", href: site.socials.toolsdeck },
   { label: "App Store", href: site.socials.appstore },
+  { label: "Google Play", href: site.socials.googleplay },
   { label: "X / Twitter", href: site.socials.twitter },
   { label: "GitHub", href: site.socials.github },
   { label: "LinkedIn", href: site.socials.linkedin },
@@ -26,7 +27,7 @@ export function Contact() {
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-base text-muted text-balance sm:text-lg">
             Whether it’s a web app, an AI-powered product, or taking an idea all
-            the way to the App Store — I’d love to hear about it.
+            the way to the App Store and Google Play — I’d love to hear about it.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">

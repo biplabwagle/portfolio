@@ -140,6 +140,7 @@ const personLd = {
     site.socials.glassfocus,
     site.socials.toolsdeck,
     site.socials.appstore,
+    site.socials.googleplay,
   ],
 };
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { ArrowUpRight, Apple, Check, Globe } from "lucide-react";
+import { ArrowUpRight, Apple, Check, Globe, Play } from "lucide-react";
 import { glassFocus } from "@/lib/site";
 import { Reveal } from "./ui/Reveal";
 import { FocusRing } from "./FocusRing";
@@ -88,6 +88,18 @@ export function GlassFocusShowcase() {
                 >
                   <Apple className="h-4 w-4" />
                   App Store
+                </a>
+              </Magnetic>
+              <Magnetic>
+                <a
+                  href={glassFocus.links.googleplay}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-cursor-label="Get"
+                  className="inline-flex items-center gap-2 rounded-xl glass px-5 py-3 text-sm font-medium text-fg transition-colors hover:border-[var(--color-border-strong)]"
+                >
+                  <Play className="h-4 w-4" />
+                  Google Play
                 </a>
               </Magnetic>
             </div>

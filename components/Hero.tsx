@@ -2,13 +2,22 @@
 
 import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { Apple, ArrowRight, ArrowUpRight, Play } from "lucide-react";
 import { site, stats } from "@/lib/site";
 import { Magnetic } from "./effects/Magnetic";
 import { Tilt } from "./effects/Tilt";
 import { FlipWord } from "./effects/FlipWord";
 
 const ease = [0.16, 1, 0.3, 1] as const;
+
+type HeroProduct = {
+  name: string;
+  icon: string;
+  blurb: string;
+  href?: string;
+  label?: string;
+  stores?: { label: string; href: string; Icon: typeof Apple }[];
+};
 
 export function Hero() {
   const reduce = useReducedMotion();
@@ -135,53 +144,91 @@ export function Hero() {
               </div>
 
               <div className="mt-5 space-y-3">
-                {[
-                  {
-                    name: "GlassFocus",
-                    icon: "/glassfocus.png",
-                    blurb: "Pomodoro focus app · iPhone · iPad · Mac",
-                    href: site.socials.appstore,
-                    label: "App Store",
-                  },
-                  {
-                    name: "ToolsDeck",
-                    icon: "/toolsdeck.svg",
-                    blurb: "102 private, client-side web tools",
-                    href: site.socials.toolsdeck,
-                    label: "Open",
-                  },
-                ].map((p) => (
-                  <a
-                    key={p.name}
-                    href={p.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    data-cursor-label={p.label}
-                    className="hover-lift group flex items-center gap-4 rounded-2xl border border-[var(--color-border)] bg-surface p-3.5"
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={p.icon}
-                      alt=""
-                      width={48}
-                      height={48}
-                      className="h-12 w-12 shrink-0 rounded-2xl"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-fg">{p.name}</span>
-                        <span className="inline-flex items-center gap-1 text-[10px] font-medium text-muted">
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                          Live
-                        </span>
+                {(
+                  [
+                    {
+                      name: "GlassFocus",
+                      icon: "/glassfocus.png",
+                      blurb: "Pomodoro focus app · iOS · Android · Mac",
+                      stores: [
+                        { label: "App Store", href: site.socials.appstore, Icon: Apple },
+                        { label: "Google Play", href: site.socials.googleplay, Icon: Play },
+                      ],
+                    },
+                    {
+                      name: "ToolsDeck",
+                      icon: "/toolsdeck.svg",
+                      blurb: "102 private, client-side web tools",
+                      href: site.socials.toolsdeck,
+                      label: "Open",
+                    },
+                  ] as HeroProduct[]
+                ).map((p) => {
+                  const rowClass =
+                    "hover-lift group flex items-center gap-4 rounded-2xl border border-[var(--color-border)] bg-surface p-3.5";
+                  const inner = (
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={p.icon}
+                        alt=""
+                        width={48}
+                        height={48}
+                        className="h-12 w-12 shrink-0 rounded-2xl"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-fg">{p.name}</span>
+                          <span className="inline-flex items-center gap-1 text-[10px] font-medium text-muted">
+                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                            Live
+                          </span>
+                        </div>
+                        <p className="mt-0.5 truncate text-xs text-muted">
+                          {p.blurb}
+                        </p>
                       </div>
-                      <p className="mt-0.5 truncate text-xs text-muted">
-                        {p.blurb}
-                      </p>
+                    </>
+                  );
+
+                  // Multi-store product (GlassFocus): a non-link row with one
+                  // icon-link per store, so both options are reachable in place.
+                  return p.stores ? (
+                    <div key={p.name} className={rowClass}>
+                      {inner}
+                      <div className="flex shrink-0 items-center gap-1.5">
+                        {p.stores.map((s) => {
+                          const Icon = s.Icon;
+                          return (
+                            <a
+                              key={s.label}
+                              href={s.href}
+                              target="_blank"
+                              rel="noreferrer"
+                              aria-label={`${p.name} on ${s.label}`}
+                              data-cursor-label={s.label}
+                              className="grid h-10 w-10 place-items-center rounded-lg border border-[var(--color-border)] text-muted transition-colors hover:border-[var(--color-border-strong)] hover:text-fg"
+                            >
+                              <Icon className="h-4 w-4" />
+                            </a>
+                          );
+                        })}
+                      </div>
                     </div>
-                    <ArrowUpRight className="h-4 w-4 shrink-0 text-faint transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                  </a>
-                ))}
+                  ) : (
+                    <a
+                      key={p.name}
+                      href={p.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      data-cursor-label={p.label}
+                      className={rowClass}
+                    >
+                      {inner}
+                      <ArrowUpRight className="h-4 w-4 shrink-0 text-faint transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    </a>
+                  );
+                })}
               </div>
 
               <p className="mt-4 text-center font-mono text-[11px] uppercase tracking-[0.2em] text-faint">

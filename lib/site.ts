@@ -25,6 +25,7 @@ export const site = {
     glassfocus: "https://www.glassfocus.app/",
     toolsdeck: "https://www.toolsdeck.app/",
     appstore: "https://apps.apple.com/us/app/glassfocus-focus-todos/id6757988398",
+    googleplay: "https://play.google.com/store/apps/details?id=com.glassfocus.app",
     twitter: "https://twitter.com/bipz17",
     linkedin: "https://www.linkedin.com/in/biplab-wagle-3953ba119",
     github: "https://github.com/biplabwagle",
@@ -77,8 +78,8 @@ export const capabilities = [
     eyebrow: "04",
     title: "AI & Product",
     blurb:
-      "Deep, practical knowledge of LLMs and how to ship them — agents, RAG, tool use, and evals — proven by building GlassFocus end-to-end and landing it on the App Store.",
-    tags: ["LLMs", "Agents", "RAG", "Evals", "Product design", "App Store"],
+      "Deep, practical knowledge of LLMs and how to ship them — agents, RAG, tool use, and evals — proven by building GlassFocus end-to-end and shipping it to the App Store and Google Play.",
+    tags: ["LLMs", "Agents", "RAG", "Evals", "Product design", "App Store & Play"],
   },
 ] as const;
 
@@ -200,10 +201,11 @@ export const glassFocus = {
     "ADHD-friendly: visual pie timer & micro-celebrations",
     "Reflective monthly journal for mood & energy",
   ],
-  platforms: ["iPhone", "iPad", "Mac", "Web"],
+  platforms: ["iPhone", "iPad", "Mac", "Android", "Web"],
   links: {
     site: "https://www.glassfocus.app/",
     appstore: "https://apps.apple.com/us/app/glassfocus-focus-todos/id6757988398",
+    googleplay: "https://play.google.com/store/apps/details?id=com.glassfocus.app",
   },
 } as const;
 
@@ -226,7 +228,7 @@ export const projects: Project[] = [
     title: "GlassFocus",
     category: "Product · Founder",
     description:
-      "A cinematic focus app combining a Pomodoro timer with tasks, soundscapes, analytics, and journaling. Live on iPhone, iPad, Mac & the web.",
+      "A cinematic focus app combining a Pomodoro timer with tasks, soundscapes, analytics, and journaling. Live on iPhone, iPad, Mac, Android & the web.",
     tags: ["SwiftUI", "Web", "Design", "Analytics"],
     href: "https://www.glassfocus.app/",
     featured: true,
