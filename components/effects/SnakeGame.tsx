@@ -193,6 +193,8 @@ export function SnakeGame() {
     window.addEventListener("touchstart", bump, { passive: true });
     const check = setInterval(() => {
       if (document.hidden || openRef.current || nudgeRef.current) return;
+      // Never nudge while THE DIG game layer is the front door.
+      if (document.documentElement.getAttribute("data-mode") === "dig") return;
       const now = performance.now();
       if (now - lastShown < 120000) return; // re-showable, never naggy
       if (now - lastActivity >= 22000) {

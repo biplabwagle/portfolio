@@ -135,6 +135,9 @@ export function GlobeIntro() {
     if (!mounted) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
+    // THE DIG owns the entrance when the visitor is in game mode — skip the
+    // globe entirely (it would play invisibly under the game layer).
+    if (document.documentElement.getAttribute("data-mode") === "dig") return;
 
     const canvas = canvasRef.current!;
     const gl =

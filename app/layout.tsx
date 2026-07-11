@@ -27,6 +27,7 @@ import { SectionDots } from "@/components/effects/SectionDots";
 import { GlobeIntro } from "@/components/effects/GlobeIntro";
 import { SnakeGame } from "@/components/effects/SnakeGame";
 import { EasterEggs } from "@/components/effects/EasterEggs";
+import { TheDig } from "@/components/game/TheDig";
 import { site } from "@/lib/site";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -58,7 +59,10 @@ const fontVars = [
 ].join(" ");
 
 // Applies the saved theme before first paint so there's no flash.
-const themeInitScript = `(function(){try{var v=["glass","editorial","terminal","brutalist","sunset","noir","neon"];var t=localStorage.getItem("bw-theme");document.documentElement.setAttribute("data-theme",v.indexOf(t)>-1?t:"editorial");}catch(e){document.documentElement.setAttribute("data-theme","editorial");}})();`;
+// Also picks the entry mode: THE DIG game-first for visitors (default "dig"),
+// or the classic résumé if they previously chose it. No JS (crawlers, tools)
+// → attribute never set → plain crawlable site.
+const themeInitScript = `(function(){try{var v=["glass","editorial","terminal","brutalist","sunset","noir","neon"];var t=localStorage.getItem("bw-theme");document.documentElement.setAttribute("data-theme",v.indexOf(t)>-1?t:"editorial");}catch(e){document.documentElement.setAttribute("data-theme","editorial");}try{var m=localStorage.getItem("bw-mode");document.documentElement.setAttribute("data-mode",m==="resume"?"resume":"dig");}catch(e){document.documentElement.setAttribute("data-mode","dig");}})();`;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://waglegroup.com"),
@@ -189,6 +193,7 @@ export default function RootLayout({
           <GlobeIntro />
           <SnakeGame />
           <EasterEggs />
+          <TheDig />
         </ThemeProvider>
       </body>
     </html>
