@@ -4,6 +4,12 @@
     "cleanUrls": false,
     "trailingSlash": false,
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "/breaker",
+        "destination": "/breaker.html"
+      }
+    ],
     "headers": [
       {
         "source": "/_next/static/**",
