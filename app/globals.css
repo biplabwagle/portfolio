@@ -877,9 +877,3 @@ html.custom-cursor [contenteditable="true"] {
     scroll-behavior: auto !important;
   }
 }
-
-/* THE DIG — while the game is the front door, the résumé beneath stays in the
-   DOM (crawlable) but the page must not scroll behind the canvas. */
-[data-mode="dig"] body {
-  overflow: hidden;
-}

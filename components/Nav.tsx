@@ -68,15 +68,6 @@ export function Nav() {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => window.dispatchEvent(new Event("open-dig"))}
-            data-cursor-label="Dig"
-            aria-label="Play The Dig — the portfolio as a game"
-            className="hidden items-center gap-1.5 rounded-xl glass px-3 py-2 text-xs text-muted transition-colors hover:text-fg md:inline-flex"
-          >
-            ⛏ Play
-          </button>
-          <button
-            type="button"
             onClick={() => window.dispatchEvent(new Event("toggle-cmdk"))}
             data-cursor-label="⌘K"
             aria-label="Open command palette"

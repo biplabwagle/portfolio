@@ -84,16 +84,6 @@ export function CommandPalette() {
     ];
     const fun: Cmd[] = [
       {
-        id: "fun-dig",
-        label: "Play The Dig ⛏ — my career as a game",
-        group: "Fun",
-        keywords: "game dig sand excavate hourglass story resume",
-        perform: () => {
-          setOpen(false);
-          window.dispatchEvent(new Event("open-dig"));
-        },
-      },
-      {
         id: "fun-snake",
         label: "Play Snake 🐍",
         group: "Fun",
