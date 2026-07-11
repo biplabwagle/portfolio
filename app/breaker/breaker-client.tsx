@@ -845,6 +845,11 @@ export function BreakerPrototype() {
         for (const o of orbs) o.sliced = true;
       },
       chargeSuper: () => { superMeter = 1; },
+      toEndcard: () => {
+        phase = "endcard";
+        setFinalStats({ score, maxCombo, time: "0:42", stack: [...stacked] });
+        setPhaseUi("endcard");
+      },
       state: () => ({ phase, gameT: Math.round(gameT), orbs: orbs.length, score, combo, superMeter, probe: { ...probe } }),
       orbs: () => orbs.filter((o) => !o.sliced).map((o) => ({ x: Math.round(o.x), y: Math.round(o.y), r: Math.round(o.r), kind: o.kind })),
       monolith: () => monolith && { sx: monolith.sx, sw: monolith.sw, drop: monolith.drop, topIdx: monolith.topIdx, coreAlive: monolith.coreAlive, seams: monolith.seams.map(s => ({ ly: Math.round(s.ly), ry: Math.round(s.ry), cut: s.cut })) },
@@ -868,7 +873,13 @@ export function BreakerPrototype() {
   }, [runId]);
 
   return (
-    <div data-no-cursor className="fixed inset-0 z-[300] select-none" style={{ background: BG0 }}>
+    <div
+      // While playing, the blade IS the cursor. Once the run is shipped and
+      // the contact card is up, bring back the site's custom cursor + trail.
+      data-no-cursor={phaseUi === "endcard" ? undefined : ""}
+      className="fixed inset-0 z-[300] select-none"
+      style={{ background: BG0 }}
+    >
       <canvas ref={canvasRef} className="absolute inset-0 touch-none" />
 
       {/* HUD */}

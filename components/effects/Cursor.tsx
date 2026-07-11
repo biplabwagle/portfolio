@@ -216,7 +216,9 @@ export function Cursor() {
 
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-[100]"
+      // Topmost layer — the game overlay is z-[300]; the cursor must render
+      // above every surface and is pointer-events-none, so it blocks nothing.
+      className="pointer-events-none fixed inset-0 z-[400]"
       style={{ opacity: visible && !hidden ? 1 : 0, transition: "opacity 0.2s" }}
       aria-hidden
     >
