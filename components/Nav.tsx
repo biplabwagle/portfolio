@@ -66,6 +66,14 @@ export function Nav() {
         </div>
 
         <div className="flex items-center gap-2">
+          <a
+            href="/breaker"
+            data-cursor-label="Game"
+            aria-label="Play Monolith Breaker — the portfolio as a game"
+            className="hidden items-center gap-1.5 rounded-xl glass px-3 py-2 text-xs text-muted transition-colors hover:text-fg md:inline-flex"
+          >
+            ▶ Play
+          </a>
           <button
             type="button"
             onClick={() => window.dispatchEvent(new Event("toggle-cmdk"))}
@@ -126,6 +134,13 @@ export function Nav() {
                 </a>
               );
             })}
+            <a
+              href="/breaker"
+              onClick={() => setOpen(false)}
+              className="block rounded-xl px-4 py-3 text-sm text-muted transition-colors hover:bg-surface hover:text-fg"
+            >
+              ▶ Play Monolith Breaker
+            </a>
             <a
               href="#contact"
               onClick={() => setOpen(false)}

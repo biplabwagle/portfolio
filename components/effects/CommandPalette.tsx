@@ -84,6 +84,16 @@ export function CommandPalette() {
     ];
     const fun: Cmd[] = [
       {
+        id: "fun-breaker",
+        label: "Play Monolith Breaker 🗡️",
+        group: "Fun",
+        keywords: "game slice blade arcade monolith breaker play career",
+        perform: () => {
+          setOpen(false);
+          window.location.href = "/breaker";
+        },
+      },
+      {
         id: "fun-snake",
         label: "Play Snake 🐍",
         group: "Fun",
